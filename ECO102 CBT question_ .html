@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO 102 CBT - 120 Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><text x="50%" y="50%" fill="rgba(0, 0, 0, 0.1)" font-size="40" font-family="Arial" transform="rotate(-45)" text-anchor="middle">EMPEROR\'SMEDIA</text></svg>') repeat;
+            background-size: 200px 200px;
+        }
+        .question { margin-bottom: 15px; }
+        .submit-btn { margin-top: 20px; padding: 10px 20px; }
+        #result { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>ECO 102 - 120 Questions CBT</h1>
+    <form id="quizForm" onsubmit="calculateScore(event)">
+        <div id="questionContainer"></div>
+        <button type="submit" class="submit-btn">Submit Quiz</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        // 120 questions: 20 per topic
+        const questions = [
+            // National Income (20 questions from extracted data)
+            { q: "Which of the following is a method to measure the National Income?", options: { a: "Expenditure method", b: "Income method", c: "Product method", d: "All of the above" }, correct: "d", category: "National Income" },
+            { q: "Which of the following is the correct term for calculating National Income at the market prices?", options: { a: "Money income", b: "Non-monetary income", c: "Real income", d: "None of the above" }, correct: "a", category: "National Income" },
+            { q: "Which of the following is the correct term for calculating National Income at constant prices?", options: { a: "Current income", b: "Domestic income", c: "Real income", d: "None of the above" }, correct: "c", category: "National Income" },
+            { q: "Which of the following items are not included while measuring the Gross National Product?", options: { a: "Illegal and leisure activities", b: "Purely financial transactions", c: "Transferring of used goods and non-market goods and services", d: "All of the above" }, correct: "d", category: "National Income" },
+            { q: "Which of the following is the employment theory related to?", options: { a: "Macroeconomics", b: "Static economics", c: "Microeconomics", d: "None of the above" }, correct: "a", category: "National Income" },
+            { q: "Which of the following is the actual definition of transfer payments?", options: { a: "Transfer payments refer to the payments made as compensation to the employees within an organisation", b: "Transfer payments refer to the payments made to workers on transferring from one job to another", c: "Transfer payments refer to the payments made without any exchange of goods and services", d: "None of the above" }, correct: "c", category: "National Income" },
+            { q: "The difference between the National Income and the Net National Product at market price is known as _______.", options: { a: "National debt transfer", b: "Current transfers from the rest of the world", c: "Net indirect taxes", d: "All of the above" }, correct: "c", category: "National Income" },
+            { q: "Which of the following is not a part of the National Income?", options: { a: "Undistributed profits", b: "Income from government expenditure", c: "The interest amount on the unproductive national debt", d: "The payments made by a household to a firm for purchasing goods and services" }, correct: "c", category: "National Income" },
+            { q: "Which of the following is another term for the Net National Product at factor cost?", options: { a: "Personal Income", b: "National Income", c: "Gross National Product", d: "Net Domestic Product" }, correct: "b", category: "National Income" },
+            { q: "Which of the following is true for Disposable Income?", options: { a: "Disposable Income is the difference between Private Income and Indirect Taxes", b: "Disposable Income is the difference between Personal Income and Indirect Taxes", c: "Disposable Income is the difference between Private Income and Direct Taxes", d: "Disposable Income is the difference between Personal Income and Direct Taxes" }, correct: "d", category: "National Income" },
+            { q: "Which of the following organisations calculate the Gross Domestic Product in India?", options: { a: "Reserve Bank of India", b: "Indian Statistical Institute", c: "National Statistical Office", d: "None of the above" }, correct: "c", category: "National Income" },
+            { q: "Which of the following is the correct definition for the Gross Domestic Product (GDP) of a country?", options: { a: "The Gross Domestic Product is the total monetary value of the economic transactions within a country in a given year", b: "The Gross Domestic Product is the total value of both monetary and non-monetary goods and services in a country within a given year", c: "The Gross Domestic Product is the total value of tradable goods produced in a country within a given year", d: "None of the above" }, correct: "d", category: "National Income" },
+            { q: "Which of the following is true for Inflation?", options: { a: "The value of money increases during Inflation", b: "The value of money decreases during Inflation", c: "The value of money stays the same during Inflation", d: "None of the above" }, correct: "b", category: "National Income" },
+            { q: "Which of the following is true for Net National Income?", options: { a: "The Net National Income is the total of Gross National Product and Depreciation", b: "The Net National Income is the difference between Gross National Product and Depreciation", c: "The Net National Income is the difference between Gross Domestic Product and Depreciation", d: "The Net National Income is the difference between Net Domestic Product and Depreciation" }, correct: "b", category: "National Income" },
+            { q: "Which of the following is the financial year in India?", options: { a: "April 1 to March 31", b: "January 1 to December 31", c: "March 1 to April 30", d: "None of the above" }, correct: "a", category: "National Income" },
+            { q: "Which of the following is not included in National Income?", options: { a: "Wages", b: "Rent", c: "Interest", d: "Transfer payments" }, correct: "d", category: "National Income" },
+            { q: "The sum of value added at each stage of production is equivalent to?", options: { a: "Intermediate goods", b: "Final goods", c: "Consumption goods", d: "Capital goods" }, correct: "b", category: "National Income" },
+            { q: "National Income at factor cost is equal to?", options: { a: "Net National Product – Indirect taxes + Subsidies", b: "Net National Product + Indirect taxes + Subsidies", c: "Gross National Product – Indirect taxes + Subsidies", d: "Net National Product – Direct taxes + Subsidies" }, correct: "a", category: "National Income" },
+            { q: "The agency responsible for estimating National Income in India is?", options: { a: "RBI", b: "Planning Commission", c: "NSO", d: "Finance Ministry" }, correct: "c", category: "National Income" },
+            { q: "Personal Disposable Income is equal to?", options: { a: "Personal Income – Direct Taxes", b: "Personal Income – Indirect Taxes", c: "Personal Income + Direct Taxes", d: "Personal Income + Indirect Taxes" }, correct: "a", category: "National Income" },
+
+            // National Income Accounting (20 questions from extracted data)
+            { q: "What do you call a proportionate saving in costs gained by an increased level of production?", options: { a: "Economies of scale", b: "Isocost", c: "Isoquant", d: "Production function" }, correct: "a", category: "National Income Accounting" },
+            { q: "Which of the following is an example of revenue expenditure?", options: { a: "Investment in public sector company", b: "Purchase of land by the government", c: "Purchase of Machinery for Government Project", d: "Salary payment to government employees" }, correct: "d", category: "National Income Accounting" },
+            { q: "Which of the following is not included in the calculation of National Income?", options: { a: "Employers contribution to provident fund", b: "Unemployment allowance", c: "Free services by Government", d: "Defence and security services" }, correct: "b", category: "National Income Accounting" },
+            { q: "_______ is the maximum income available that can be saved and spent by a nation on the consumption of goods and services.", options: { a: "National Disposable Income", b: "Gross National Disposable Income", c: "National Income", d: "Personal Disposable Income" }, correct: "a", category: "National Income Accounting" },
+            { q: "Which of the following taxes is a direct tax?", options: { a: "Service Tax", b: "Entertainment tax", c: "Corporate tax", d: "Sales tax" }, correct: "c", category: "National Income Accounting" },
+            { q: "Which of the following is NOT one of the methods of national income estimation?", options: { a: "Banking method", b: "Expenditure method", c: "Product method", d: "Income method" }, correct: "a", category: "National Income Accounting" },
+            { q: "Gross Domestic Product (GDP) of a country is:", options: { a: "Total value of tradable goods produced in a year", b: "Total value of monetary and non-monetary goods and services within a year", c: "Total value of economic transactions done within a country within a year", d: "None of the above" }, correct: "d", category: "National Income Accounting" },
+            { q: "Which organization calculates Gross Domestic Product (GDP) in India?", options: { a: "National Statistical Office", b: "Ministry of Commerce and Industry", c: "Indian Statistical Institute", d: "Reserve Bank of India" }, correct: "a", category: "National Income Accounting" },
+            { q: "Which of the following is NOT a feature of National Income?", options: { a: "It is a macroeconomic concept", b: "It is a flow concept", c: "It is always expressed with reference to the financial year", d: "It is included only in intermediate goods" }, correct: "d", category: "National Income Accounting" },
+            { q: "The Net National Product can be calculated by subtracting Depreciation from _________.", options: { a: "Direct Taxes", b: "Gross Domestic Product", c: "Gross National Product", d: "National Income" }, correct: "c", category: "National Income Accounting" },
+            { q: "Mixed Economy refers to:", options: { a: "Coexistence of small and large industries", b: "Coexistence of agriculture and industry", c: "Coexistence of public and private sector", d: "Coexistence of domestic and foreign enterprises" }, correct: "c", category: "National Income Accounting" },
+            { q: "Which of the following best represents the concept of Net Domestic Product (NDP)?", options: { a: "GDP - Income from abroad", b: "GDP + Income from abroad", c: "GNP - Depreciation", d: "GDP - Depreciation" }, correct: "d", category: "National Income Accounting" },
+            { q: "Who computes the National Income in India?", options: { a: "Ministry of Finance", b: "National Statistical Office (NSO)", c: "RBI", d: "None of these" }, correct: "b", category: "National Income Accounting" },
+            { q: "The value of money during inflation:", options: { a: "Increases", b: "Decreases", c: "Stays stable", d: "None of these" }, correct: "b", category: "National Income Accounting" },
+            { q: "The Multi-dimensional Poverty Index (MPI) was developed in 2008 by the Oxford Poverty and Human Development Initiative (OPHI) and the United Nations Development Programme and is used alongside the HDI.", options: { a: "True", b: "False", c: "Partially true", d: "None" }, correct: "a", category: "National Income Accounting" },
+            { q: "Isocost refers to:", options: { a: "A curve showing combinations of factor inputs with constant market cost", b: "An isoquant showing all combinations of factor inputs with constant output", c: "The production function", d: "Economies of scale" }, correct: "a", category: "National Income Accounting" },
+            { q: "The difference between GDP and NDP is:", options: { a: "Depreciation", b: "Net Indirect Taxes", c: "Subsidies", d: "Income from abroad" }, correct: "a", category: "National Income Accounting" },
+            { q: "Which is a component of the expenditure method in national income accounting?", options: { a: "Consumption", b: "Investment", c: "Government spending", d: "All of the above" }, correct: "d", category: "National Income Accounting" },
+            { q: "Net National Income = NNP at factor cost - ?", options: { a: "Direct taxes", b: "Indirect taxes", c: "Subsidies", d: "Depreciation" }, correct: "b", category: "National Income Accounting" },
+            { q: "The income method calculates national income by adding up:", options: { a: "Wages, rent, interest, profits", b: "Consumption, investment", c: "Exports - imports", d: "Taxes and subsidies" }, correct: "a", category: "National Income Accounting" },
+
+            // Economic Growth and Development (20 questions from extracted data)
+            { q: "Which statement best defines economic growth?", options: { a: "Increase in real output of goods and services over time", b: "Reduction in poverty", c: "Growth in population", d: "Widespread equality" }, correct: "a", category: "Economic Growth and Development" },
+            { q: "Which of the following is an indicator of economic development, not just growth?", options: { a: "GDP per capita", b: "Human Development Index (HDI)", c: "National Income", d: "Output per worker" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "The Harrod-Domar model is related to:", options: { a: "Income distribution", b: "Capital formation and growth rate", c: "Labour surplus", d: "Inflation" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which of these is considered a non-economic factor in economic development?", options: { a: "Literacy rate", b: "Per capita income", c: "Technological advancement", d: "Investment rate" }, correct: "a", category: "Economic Growth and Development" },
+            { q: "The Lorenz curve is used to represent:", options: { a: "National output", b: "Unemployment rate", c: "Income inequality", d: "Capital formation" }, correct: "c", category: "Economic Growth and Development" },
+            { q: "What is the primary focus of economic growth?", options: { a: "Welfare and equity", b: "Earning and production increase", c: "Sustainability", d: "Long-term holistic change" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which indicator is used to measure economic development and includes health, education, and income?", options: { a: "GDP", b: "GNP", c: "HDI", d: "PQLI" }, correct: "c", category: "Economic Growth and Development" },
+            { q: "Economic development is characterized by:", options: { a: "Quantitative changes only", b: "Qualitative and quantitative changes", c: "Short-term focus", d: "Increase in population" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which of the following is a measurement of economic growth?", options: { a: "HDI", b: "PQLI", c: "GDP", d: "Literacy rate" }, correct: "c", category: "Economic Growth and Development" },
+            { q: "The Physical Quality of Life Index (PQLI) focuses on:", options: { a: "GDP per capita", b: "Life expectancy, infant mortality, and literacy", c: "National income", d: "Capital formation" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which theory emphasizes the role of savings and investment in economic growth?", options: { a: "Lewis Dual-Sector Model", b: "Harrod-Domar Model", c: "Endogenous Growth Theory", d: "Solow-Swan Model" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "What does the Lewis Dual-Sector Model explain?", options: { a: "Income inequality", b: "Transfer of labor from agriculture to industry", c: "Capital formation", d: "Technological progress" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which factor is crucial for economic development according to non-economic factors?", options: { a: "Political stability", b: "Per capita income", c: "Investment rate", d: "Output per worker" }, correct: "a", category: "Economic Growth and Development" },
+            { q: "The Gini coefficient is used to measure:", options: { a: "National output", b: "Income inequality", c: "Life expectancy", d: "Literacy rate" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which of the following is a key indicator for measuring poverty rate in economic development?", options: { a: "GDP per capita", b: "Percentage of population below the poverty line", c: "HDI", d: "PQLI" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Economic growth is typically measured over what time span?", options: { a: "Long-term", b: "Short-medium term", c: "Immediate term", d: "Decades only" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "Which model highlights the role of innovation and human capital in economic growth?", options: { a: "Harrod-Domar Model", b: "Endogenous Growth Theory", c: "Lewis Dual-Sector Model", d: "Solow-Swan Model" }, correct: "b", category: "Economic Growth and Development" },
+            { q: "What is a common use of understanding economic growth and development in real life?", options: { a: "Guiding policy and investment decisions", b: "Increasing population growth", c: "Reducing national output", d: "Focusing on short-term profits only" }, correct: "a", category: "Economic Growth and Development" },
+            { q: "Which indicator considers life expectancy at age one in economic development?", options: { a: "GDP", b: "HDI", c: "PQLI", d: "Gini coefficient" }, correct: "c", category: "Economic Growth and Development" },
+            { q: "How can MCQ practice help in clarifying differences between GDP and GNP?", options: { a: "By focusing on rote memorization", b: "Through application-based questions improving analytical skills", c: "By ignoring key concepts", d: "By avoiding calculations" }, correct: "b", category: "Economic Growth and Development" },
+
+            // Income Distribution (20 questions from extracted data, supplemented for completeness)
+            { q: "What does the Gini index measure?", options: { a: "The total income of a country", b: "Income inequality within a population", c: "The percentage of income distributed to each factor of production", d: "The growth rate of national income" }, correct: "b", category: "Income Distribution" },
+            { q: "What does it mean when a country's income distribution table shows the same income percentage for each segment?", options: { a: "The country has perfect income equality", b: "The country has high income inequality", c: "The country has no manufacturing sector", d: "The country has a fully automated economy" }, correct: "a", category: "Income Distribution" },
+            { q: "The assembly line in a car factory that is completely operated by machinery represents which factor of production?", options: { a: "Labor", b: "Capital", c: "Land", d: "Entrepreneurship" }, correct: "b", category: "Income Distribution" },
+            { q: "In a country with no manufacturing, which factor is likely to have the most income?", options: { a: "Capital", b: "Labor", c: "Land", d: "Entrepreneurship" }, correct: "c", category: "Income Distribution" },
+            { q: "In an automated factory with employees who oversee production, which factor is likely to gain the most income?", options: { a: "Land", b: "Labor", c: "Capital", d: "Entrepreneurship" }, correct: "c", category: "Income Distribution" },
+            { q: "What is one example of knowledge application in the quiz?", options: { a: "Analyzing historical data", b: "Answering questions about factors in a fully automated factory", c: "Creating a budget plan", d: "Designing a factory layout" }, correct: "b", category: "Income Distribution" },
+            { q: "What is one topic covered in the accompanying lesson on factor and personal distribution of income?", options: { a: "Global economic trends", b: "Example of the Gini index", c: "Tax policies and their effects", d: "International trade agreements" }, correct: "b", category: "Income Distribution" },
+            { q: "What is one skill practiced in relation to the Gini index in the quiz?", options: { a: "Data analysis", b: "Information recall", c: "Public speaking", d: "Project management" }, correct: "b", category: "Income Distribution" },
+            { q: "Which factor of production is most likely associated with an assembly line operated by machinery?", options: { a: "Labor", b: "Capital", c: "Land", d: "Entrepreneurship" }, correct: "b", category: "Income Distribution" },
+            { q: "What does the quiz aim to help with regarding income distribution?", options: { a: "Developing new economic theories", b: "Answering questions on key points like the Gini index", c: "Creating income distribution policies", d: "Forecasting future economic growth" }, correct: "b", category: "Income Distribution" },
+            { q: "Which of the following is a measure of income inequality?", options: { a: "GDP", b: "Gini Coefficient", c: "CPI", d: "PPI" }, correct: "b", category: "Income Distribution" },
+            { q: "The Lorenz curve is used to illustrate?", options: { a: "Income equality", b: "Income inequality", c: "Economic growth", d: "Inflation rates" }, correct: "b", category: "Income Distribution" },
+            { q: "A progressive tax system helps in?", options: { a: "Increasing inequality", b: "Reducing inequality", c: "Maintaining status quo", d: "None of the above" }, correct: "b", category: "Income Distribution" },
+            { q: "Which policy can reduce income inequality?", options: { a: "Subsidies for the poor", b: "Tax cuts for the rich", c: "Deregulation", d: "Privatization" }, correct: "a", category: "Income Distribution" },
+            { q: "What is functional income distribution?", options: { a: "Distribution between factors of production", b: "Distribution among households", c: "Distribution by regions", d: "Distribution by age" }, correct: "a", category: "Income Distribution" },
+            { q: "Personal income distribution refers to?", options: { a: "Income among individuals or households", b: "Income among factors", c: "National income", d: "Corporate profits" }, correct: "a", category: "Income Distribution" },
+            { q: "Kuznets curve hypothesizes that inequality?", options: { a: "Increases then decreases with development", b: "Decreases constantly", c: "Increases constantly", d: "Remains constant" }, correct: "a", category: "Income Distribution" },
+            { q: "Which factor contributes to income inequality?", options: { a: "Education disparities", b: "Equal access to resources", c: "Uniform wages", d: "None of the above" }, correct: "a", category: "Income Distribution" },
+            { q: "The Palma ratio measures?", options: { a: "Income share of top 10% to bottom 40%", b: "GDP growth", c: "Inflation", d: "Unemployment" }, correct: "a", category: "Income Distribution" },
+            { q: "What is the Theil index used for?", options: { a: "Measuring inequality", b: "Measuring growth", c: "Measuring trade", d: "Measuring inflation" }, correct: "a", category: "Income Distribution" },
+
+            // Money, Banking and the Financial Sector (20 questions from extracted data)
+            { q: "Which of the following is a step that the central bank will take to encourage greater investment in the economy?", options: { a: "It will look to increase the cash reserve ratio", b: "It will look to reduce the cash reserve ratio", c: "It will look to increase the bank rate", d: "It will look to sell the government securities in the open market" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "Which of the following is a step that the central bank will take to increase the overall availability of credit?", options: { a: "It will sell the government securities in the market", b: "It will buy more government securities from the market", c: "It will raise the reverse repo rate", d: "It will raise the repo rate" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "Which of the following is a step that the central bank will take to decrease the overall availability of credit?", options: { a: "Buy government securities", b: "Reduce repo rate", c: "Sell government securities", d: "Reduce bank rate" }, correct: "c", category: "Money, Banking and the Financial Sector" },
+            { q: "What is the main function of a central bank?", options: { a: "Regulate money supply", b: "Issue notes", c: "Banker to government and banks", d: "All of the above" }, correct: "d", category: "Money, Banking and the Financial Sector" },
+            { q: "Demand deposits include?", options: { a: "Fixed deposits and current accounts", b: "Savings and fixed deposits", c: "Current and savings accounts", d: "Fixed, current, and savings accounts" }, correct: "c", category: "Money, Banking and the Financial Sector" },
+            { q: "What is bank rate?", options: { a: "Discount rate of central bank", b: "Rate at which central bank lends to commercial banks", c: "Different from interest rate", d: "All of the above" }, correct: "d", category: "Money, Banking and the Financial Sector" },
+            { q: "Effect of central bank selling securities?", options: { a: "Credit creation falls", b: "Credit creation rises", c: "No effect", d: "Credit creation may rise or fall" }, correct: "a", category: "Money, Banking and the Financial Sector" },
+            { q: "Effect of lowering cash reserve ratio?", options: { a: "Lending capacity increases", b: "Lending capacity decreases", c: "No effect", d: "May increase or decrease" }, correct: "a", category: "Money, Banking and the Financial Sector" },
+            { q: "Effect of rise in reverse repo rate?", options: { a: "Demand for goods decreases", b: "Demand for goods increases", c: "No effect", d: "May increase or decrease" }, correct: "a", category: "Money, Banking and the Financial Sector" },
+            { q: "Effect of increase in repo rate?", options: { a: "Money supply decreases", b: "Money supply increases", c: "No effect", d: "Increases then decreases" }, correct: "a", category: "Money, Banking and the Financial Sector" },
+            { q: "Credit creation by banks is based on?", options: { a: "Total assets", b: "Total deposits", c: "Total securities", d: "Cash reserves" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "What is money multiplier?", options: { a: "1/CRR", b: "CRR", c: "1/SLR", d: "SLR" }, correct: "a", category: "Money, Banking and the Financial Sector" },
+            { q: "What is fiat money?", options: { a: "Backed by gold", b: "Legal tender", c: "Commodity money", d: "Credit money" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "Primary function of money?", options: { a: "Medium of exchange", b: "Store of value", c: "Unit of account", d: "All of the above" }, correct: "d", category: "Money, Banking and the Financial Sector" },
+            { q: "What is the primary function of commercial banks in the money supply?", options: { a: "Issuing currency", b: "Creating bank deposits", c: "Controlling interest rates", d: "Managing government debt" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "Which of the following is included in the measure of M1 money supply?", options: { a: "Time deposits", b: "Savings deposits", c: "Currency in circulation", d: "Government securities" }, correct: "c", category: "Money, Banking and the Financial Sector" },
+            { q: "How does the Reserve Bank of India influence the money supply through open market operations?", options: { a: "By increasing CRR", b: "By buying and selling government securities", c: "By setting margin requirements", d: "By accepting demand deposits" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "What is the effect of increasing the Statutory Liquidity Ratio (SLR) on banks?", options: { a: "Increases lending capacity", b: "Decreases lending capacity", c: "Has no effect on lending", d: "Increases deposit creation" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "Which of the following is a characteristic of fiduciary money?", options: { a: "It has intrinsic value like gold", b: "It is accepted based on trust", c: "It is issued only by commercial banks", d: "It cannot be used for transactions" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+            { q: "What happens to the money multiplier if the Legal Reserve Ratio (LRR) decreases?", options: { a: "It decreases", b: "It increases", c: "It remains the same", d: "It becomes zero" }, correct: "b", category: "Money, Banking and the Financial Sector" },
+
+            // International Trade (20 questions from extracted data)
+            { q: "Trade between two countries can be useful if cost ratios of goods are:", options: { a: "Undetermined", b: "Decreasing", c: "Equal", d: "Different" }, correct: "d", category: "International Trade" },
+            { q: "The term Euro Currency market refers to:", options: { a: "The international foreign exchange market", b: "The market where the borrowing and lending of currencies take place outside the country of issue", c: "The countries which have adopted Euro as their currency", d: "The market in which Euro is exchanged for other currencies" }, correct: "b", category: "International Trade" },
+            { q: "Which of the following theories suggests that firms seek to penetrate new markets over time?", options: { a: "Imperfect Market Theory", b: "Product cycle theory", c: "Theory of Comparative Advantage", d: "None of the above" }, correct: "d", category: "International Trade" },
+            { q: "Dumping refers to:", options: { a: "Reducing tariffs", b: "Sale of goods abroad at a lower price, below their cost and price in their home market", c: "Buying goods at low prices abroad and selling at higher prices locally", d: "Expensive goods selling for low prices" }, correct: "b", category: "International Trade" },
+            { q: "International trade and domestic trade differ because of:", options: { a: "Different government policies", b: "Immobility of factors", c: "Trade restrictions", d: "All of the above" }, correct: "d", category: "International Trade" },
+            { q: "The margin for a currency future should be maintained with the clearing house by:", options: { a: "The seller", b: "The buyer", c: "Either the buyer or the seller as per the agreement between them", d: "Both the buyer and the seller" }, correct: "d", category: "International Trade" },
+            { q: "The following statement with respect to currency option is wrong:", options: { a: "Foreign currency- Rupee option is available in India", b: "An American option can be executed on any day during its currency", c: "Put option gives the buyer the right to sell the foreign currency", d: "Call option will be used by exporters" }, correct: "d", category: "International Trade" },
+            { q: "Govt. policy about exports and imports is called:", options: { a: "Commercial policy", b: "Fiscal policy", c: "Monetary policy", d: "Finance policy" }, correct: "a", category: "International Trade" },
+            { q: "Which of the following is international trade?", options: { a: "Trade between countries", b: "Trade between regions", c: "Trade between provinces", d: "Both (b) and (c)" }, correct: "a", category: "International Trade" },
+            { q: "Market in which currencies buy and sell and their prices settle on is called the:", options: { a: "International bond market", b: "International capital market", c: "Foreign exchange market", d: "Eurocurrency market" }, correct: "c", category: "International Trade" },
+            { q: "What is a primary reason why nations conduct international trade?", options: { a: "Some nations prefer to produce one thing while others produce another", b: "Resources are not equally distributed to all trading nations", c: "Trade enhances opportunities to accumulate profits", d: "Interest rates are not identical in all trading nations" }, correct: "b", category: "International Trade" },
+            { q: "A main advantage of specialization results from:", options: { a: "The specializing country behaving as a monopoly", b: "Smaller production runs resulting in lower unit costs", c: "High wages paid to foreign workers", d: "Economies of large scale production" }, correct: "d", category: "International Trade" },
+            { q: "International trade in goods and services is sometimes used as a substitute for all of the following except:", options: { a: "International movements of capital", b: "International movements of labor", c: "International movements of technology", d: "Domestic production of different goods and services" }, correct: "d", category: "International Trade" },
+            { q: "If a nation has an open economy, it means that the nation:", options: { a: "Allows private ownership of capital", b: "Has flexible exchange rates", c: "Has fixed exchange rates", d: "Conducts trade with other countries" }, correct: "d", category: "International Trade" },
+            { q: "International trade forces domestic firms to become more competitive in terms of:", options: { a: "The introduction of new products", b: "Product design and quality", c: "Product price", d: "All of the above" }, correct: "d", category: "International Trade" },
+            { q: "The movement to free international trade is most likely to generate short-term unemployment in which industries:", options: { a: "Industries in which there are neither imports nor exports", b: "Import-competing industries", c: "Industries that sell to domestic and foreign buyers", d: "Industries that sell to only foreign buyers" }, correct: "b", category: "International Trade" },
+            { q: "International trade is based on the idea that:", options: { a: "Exports should exceed imports", b: "Imports should exceed exports", c: "Resources are more mobile internationally than are goods", d: "Resources are less mobile internationally than are goods" }, correct: "d", category: "International Trade" },
+            { q: "Arguments for free trade are sometimes disregarded by politicians because:", options: { a: "Maximizing domestic efficiency is not considered important", b: "Maximizing consumer welfare may not be a chief priority", c: "There exist sound economic reasons for keeping one’s economy isolated from other economies", d: "Economists tend to favor highly protected domestic markets" }, correct: "b", category: "International Trade" },
+            { q: "Which American industry has least been affected by import competition in recent years?", options: { a: "Automobiles", b: "Steel", c: "Radios and TVs", d: "Computer software" }, correct: "d", category: "International Trade" },
+            { q: "The largest amount of trade with the United States in recent years has been conducted by:", options: { a: "Canada", b: "Germany", c: "Mexico", d: "United Kingdom" }, correct: "a", category: "International Trade" }
+        ];
+
+        // Shuffle function
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Render questions
+        function renderQuestions() {
+            shuffle(questions);
+            const container = document.getElementById('questionContainer');
+            container.innerHTML = '';
+            questions.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `${index + 1}. ${item.q}<br>` +
+                    Object.keys(item.options).map(opt => 
+                        `<input type="radio" name="q${index + 1}" value="${opt}"> ${opt}) ${item.options[opt]}<br>`
+                    ).join('');
+                container.appendChild(div);
+            });
+        }
+
+        // Calculate score
+        function calculateScore(event) {
+            event.preventDefault();
+            let score = 0;
+            const answers = {};
+            questions.forEach((q, index) => answers[`q${index + 1}`] = q.correct);
+
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                if (selected && selected.value === answers[q]) {
+                    score++;
+                }
+            }
+
+            const totalQuestions = questions.length;
+            const percentage = ((score / totalQuestions) * 100).toFixed(2);
+            document.getElementById('result').innerHTML = `Your score: ${score}/${totalQuestions} (${percentage}%)`;
+        }
+
+        // Load questions on page load
+        window.onload = renderQuestions;
+    </script>
+</body>
+</html>
